@@ -11,7 +11,7 @@ class App extends React.Component {
       result: '',
       crossW: 0,
       zerosW: 0,
-      gameOn: true,
+      gameOn: false,
       firstPlayer: ''
     };
 
@@ -81,7 +81,7 @@ class App extends React.Component {
       this.setState({squares: Array(9).fill(null)});
       this.setState({count: 0});
       this.setState({result: ''});
-      this.setState({gameOn: true})
+      
      }, 5000);
   }
 
@@ -92,15 +92,18 @@ class App extends React.Component {
    }
   }
 
-  restart = e => {
+  restart = () => {
     this.setState({squares: Array(9).fill(null)});
     this.setState({count: 0});
     this.setState({result: ''});
-    
+  }
+
+  start = () => {
+    this.setState({gameOn: true})
   }
 
   whoFirst = e => {
-    this.restart();
+    
     let data = e.target.getAttribute('data');
     data === 'O' ? this.setState({firstPlayer: 'O'}) : this.setState({firstPlayer: 'X'})
     console.log(this.state.firstPlayer)
@@ -127,6 +130,7 @@ class App extends React.Component {
         <div className="square" onClick={this.clickHandler} data="7">{this.state.squares[7]}</div>
         <div className="square" onClick={this.clickHandler} data="8">{this.state.squares[8]}</div>
         </div>
+        <button className="start-btn btn" onClick={this.start}>Start game</button>
         <button className="X-btn btn" onClick={this.whoFirst} data="X">X first</button>
         <button className="O-btn btn" onClick={this.whoFirst} data="O">O first</button>
         <button className="restart-btn btn" onClick={this.restart}>Restart game</button>
