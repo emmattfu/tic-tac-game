@@ -1,0 +1,25 @@
+.App {
+  text-align: center;
+}
+
+.tic-tac {
+  width: 300px;
+  height: 300px;
+  border: 2px solid black;
+  margin: 50px auto;
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+}
+
+.square {
+  width: 98px;
+  height: 98px;
+  border: 1px solid black;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 60px;
+  color: red;
+}
+
