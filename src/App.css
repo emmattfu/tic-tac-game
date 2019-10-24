@@ -1,3 +1,7 @@
+*:focus {
+  outline: none;
+}
+
 .App {
   text-align: center;
 }
@@ -23,3 +27,15 @@
   color: red;
 }
 
+.btn {
+  margin-top: 20px;
+  background-color: #fff;
+  padding: 10px;
+  border-radius: 10px;
+  border: 1px solid black;
+}
+
+.btn:active {
+  background-color: red;
+  color: #fff;
+}
