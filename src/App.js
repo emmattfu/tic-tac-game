@@ -12,7 +12,7 @@ class App extends React.Component {
       crossW: 0,
       zerosW: 0,
       gameOn: false,
-      firstPlayer: ''
+      firstPlayer: 'X'
     };
 
     this.winnerLine = [
@@ -55,7 +55,6 @@ class App extends React.Component {
       }
   
       this.isWinner(currentSquares[data]);
-      this.isDraw();
     }
     
   }
@@ -65,11 +64,15 @@ class App extends React.Component {
       let line = this.winnerLine[i];
       if (this.state.squares[line[0]] === winnerTeam 
         && this.state.squares[line[1]] === winnerTeam
-        && this.state.squares[line[2]] === winnerTeam
-        && this.state.count < 8) {
+        && this.state.squares[line[2]] === winnerTeam) {
         this.setState({result: winnerTeam})
         winnerTeam === 'X' ? this.setState({crossW: this.state.crossW + 1}) : this.setState({zerosW: this.state.zerosW + 1})
         this.setState({gameOn: false})
+        this.nextRound();
+      } else if (this.state.squares.every(el => el !== null) && (this.state.squares[line[0]] === winnerTeam 
+        && this.state.squares[line[1]] === winnerTeam
+        && this.state.squares[line[2]] === winnerTeam))  {
+        this.setState({result: 'Draw'});
         this.nextRound();
       }
     }
@@ -81,21 +84,14 @@ class App extends React.Component {
       this.setState({squares: Array(9).fill(null)});
       this.setState({count: 0});
       this.setState({result: ''});
-      
      }, 5000);
-  }
-
-  isDraw() {
-   if (this.state.squares.every(el => el !== null)) {
-     this.setState({result: 'Draw'});
-     this.nextRound();
-   }
   }
 
   restart = () => {
     this.setState({squares: Array(9).fill(null)});
     this.setState({count: 0});
     this.setState({result: ''});
+    this.setState({gameOn: false})
   }
 
   start = () => {
@@ -103,22 +99,36 @@ class App extends React.Component {
   }
 
   whoFirst = e => {
-    
-    let data = e.target.getAttribute('data');
-    data === 'O' ? this.setState({firstPlayer: 'O'}) : this.setState({firstPlayer: 'X'})
-    console.log(this.state.firstPlayer)
+    if (!this.state.gameOn) {
+      let data = e.target.getAttribute('data');
+
+      if (data === 'O') {
+        this.setState({firstPlayer: 'O'})
+        e.target.setAttribute('data', 'X');
+      } else {
+        this.setState({firstPlayer: 'X'})
+        e.target.setAttribute('data', 'O');
+      }
+
+    }
+  
   }
 
   render() {
     let result = '';
-    this.state.result === '' ? result = '' : result = <div className="result">{this.state.result} won!</div>
+    this.state.result === '' ? result = '' : result = <h2 className="result">{this.state.result} won!</h2>
     if (this.state.result === 'Draw') result = <div className="result">{this.state.result}!</div>
+  
     return (
       <div className="App">
          <div className="score">
-          <p>{this.state.crossW}</p>
-          <p>{this.state.zerosW}</p>
+          <p>Нолики {this.state.crossW}</p>
+          <p className="p"> : </p>
+          <p>{this.state.zerosW} Крестики</p>
         </div>
+        {result}
+        <p>Для начала игры нажмите Начать игру.</p>
+        <p>Чтобы выбрать кто будет ходить первым перед началом игры нажмите на кнопку выбора.</p>
         <div className="tic-tac">
         <div className="square" onClick={this.clickHandler} data="0">{this.state.squares[0]}</div>
         <div className="square" onClick={this.clickHandler} data="1">{this.state.squares[1]}</div>
@@ -130,11 +140,11 @@ class App extends React.Component {
         <div className="square" onClick={this.clickHandler} data="7">{this.state.squares[7]}</div>
         <div className="square" onClick={this.clickHandler} data="8">{this.state.squares[8]}</div>
         </div>
-        <button className="start-btn btn" onClick={this.start}>Start game</button>
-        <button className="X-btn btn" onClick={this.whoFirst} data="X">X first</button>
-        <button className="O-btn btn" onClick={this.whoFirst} data="O">O first</button>
-        <button className="restart-btn btn" onClick={this.restart}>Restart game</button>
-        {result}
+        <div className="buttons">
+          <button className="start-btn btn" onClick={this.start}>Начать игру</button>
+          <button className="btn" onClick={this.whoFirst} data="O"> Сейчас первыми ходят:{this.state.firstPlayer}</button>
+          <button className="restart-btn btn" onClick={this.restart}>Сбросить игру</button>
+        </div>
       </div>
     );
   }
